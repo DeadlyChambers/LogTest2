@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="~%24archNotes.docx" />
+    <None Remove="~WRL0003.tmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWS.Logger.Log4net" Version="2.0.1" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.12" />
+  </ItemGroup>
+
+</Project>
