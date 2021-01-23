@@ -122,14 +122,13 @@ namespace LogTest2.Appenders
         /// <param name="content"></param>
         private void UploadEvent(string content)
         {
-            string key = Guid.NewGuid().ToString();
-            PutObjectRequest request = new PutObjectRequest
+            string key = Guid.NewGuid().ToString();          
+            _ =Client.PutObjectAsync(new PutObjectRequest
             {
                 BucketName = BucketName,
                 Key = Filename(),
                 ContentBody = content
-            };
-            _ =Client.PutObjectAsync(request).Result;
+            }).Result;
         }
 
         /// <summary>

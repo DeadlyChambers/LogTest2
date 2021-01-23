@@ -1,4 +1,8 @@
-﻿using log4net;
+﻿using AWS.Logger.Log4net;
+using log4net;
+using log4net.Core;
+using log4net.Layout;
+using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,9 +37,35 @@ namespace LogTest2
             log4netConfig.Load(File.OpenRead(LOG_CONFIG_FILE));
 
             var repo = LogManager.CreateRepository(
-                Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
+                Assembly.GetEntryAssembly(), typeof(Hierarchy));
 
             log4net.Config.XmlConfigurator.Configure(repo, log4netConfig["log4net"]);
+        }
+    }
+
+    public static class NoConfigLogger
+    {
+        public static void ConfigureLog4net()
+        {
+            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository(Assembly.GetEntryAssembly());
+            PatternLayout patternLayout = new PatternLayout
+            {
+                ConversionPattern = "%-4timestamp [%thread] %-5level %logger %ndc - %message%newline"
+            };
+            patternLayout.ActivateOptions();
+
+            AWSAppender appender = new AWSAppender();
+            appender.Layout = patternLayout;
+
+            // Set log group and region. Assume credentials will be found using the default profile or IAM credentials.
+            appender.LogGroup = "Logging.Startup";
+            appender.Region = "us-east-1";
+
+            appender.ActivateOptions();
+            hierarchy.Root.AddAppender(appender);
+
+            hierarchy.Root.Level = Level.All;
+            hierarchy.Configured = true;
         }
     }
 }

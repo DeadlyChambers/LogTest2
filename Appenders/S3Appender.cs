@@ -93,14 +93,14 @@ namespace LogTest2.Appenders
 
         private void UploadEvent(LoggingEvent loggingEvent, AmazonS3Client client)
         {
-            string key = Guid.NewGuid().ToString();
-            var xml = Utility.GetXmlString(loggingEvent);
-
-            PutObjectRequest request = new PutObjectRequest();
-            request.BucketName = _bucketName;
-            request.Key = Filename(key);
-            request.ContentBody = xml;
-            client.PutObjectAsync(request);
+            string key = Guid.NewGuid().ToString();          
+           
+            client.PutObjectAsync(new PutObjectRequest
+            {
+                BucketName = _bucketName,
+                Key = Filename(key),
+                ContentBody = Utility.GetXmlString(loggingEvent)
+            });
 
             // log.txt
             // log.1.txt
